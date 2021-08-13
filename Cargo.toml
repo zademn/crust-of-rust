@@ -1,0 +1,8 @@
+[workspace]
+members = [
+    "channels",
+    "iterators",
+    "lifetimes",
+    "macros_declarative",
+    "smart_pointers",
+]
