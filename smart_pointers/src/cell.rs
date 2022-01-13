@@ -30,13 +30,12 @@ impl<T> Cell<T> {
     }
 }
 
-
 #[cfg(test)]
-mod tests{
-    use  super::Cell;
+mod tests {
+    use super::Cell;
 
     #[test]
-    fn bad(){
+    fn bad() {
         use std::sync::Arc;
         let x = Arc::new(Cell::new(42));
         let x1 = Arc::clone(&x);
@@ -50,5 +49,4 @@ mod tests{
         //     x2.set(44);
         // });
     }
-
 }

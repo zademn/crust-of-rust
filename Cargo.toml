@@ -5,4 +5,5 @@ members = [
     "lifetimes",
     "macros_declarative",
     "smart_pointers",
+    "async-await"
 ]
