@@ -1,4 +1,3 @@
-
 // https://www.youtube.com/watch?v=rAl-9HwD858&list=PLqbS7AVVErFiWDOAVrPt7aYmnuuOLYvOa
 
 // # Lifetimes
@@ -46,7 +45,7 @@ impl<'haystack, 'delim> StrSplit<'haystack, 'delim> {
     }
 }
 
-impl<'haystack,'delim> Iterator for StrSplit<'haystack, 'delim> {
+impl<'haystack, 'delim> Iterator for StrSplit<'haystack, 'delim> {
     // lifetime of the returned value
     type Item = &'haystack str; // Rust needs to know how long can it keep this pointer. Till the end of the program?
     fn next(&mut self) -> Option<Self::Item> {
@@ -68,15 +67,17 @@ impl<'haystack,'delim> Iterator for StrSplit<'haystack, 'delim> {
     }
 }
 
-
-fn until_char<'s>(s: &'s str, c: char) -> &'s str{
+#[allow(unused)]
+fn until_char<'s>(s: &'s str, c: char) -> &'s str {
     // Error without lifetimes: "cannot return value referencing temporary value"
     // `c` has a lifetime different than `s`
     // `c` dies this function
-    // The rust compiler takes the shorter lifetime (`c`'s lifetime) 
+    // The rust compiler takes the shorter lifetime (`c`'s lifetime)
     // and it can't return a lifetime that dies in this function
     let delim = &format!("{}", c);
-    StrSplit::new(s, &delim).next().expect("StrSplit always gives at least one result")
+    StrSplit::new(s, &delim)
+        .next()
+        .expect("StrSplit always gives at least one result")
 }
 
 #[test]
@@ -99,5 +100,3 @@ fn it_works2() {
     println!("{:?}", letters);
     assert_eq!(letters, vec!["a", "b", "c", "d", "e", ""]);
 }
-
-
