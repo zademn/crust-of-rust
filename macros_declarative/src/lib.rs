@@ -1,9 +1,11 @@
+#![allow(unused_variables)]
+#[allow(unused)]
 macro_rules! my_add {
     ($a: expr, $b: expr) => {
         $a + $b
     };
 }
-
+#[allow(unused)]
 macro_rules! identif {
     ($z: ident) => {
         let x = 42; // This lives only inside this macro
