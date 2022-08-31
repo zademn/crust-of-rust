@@ -1,4 +1,4 @@
-# Notes
+# Smart Pointers
 
 **Shareable mutable containers**
 : Mutate with shared references in a controlled fashion
