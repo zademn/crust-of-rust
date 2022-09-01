@@ -36,7 +36,7 @@ macro_rules! my_vec{
     };
     ($($element: expr,)*) => {
         {
-            crate::my_vec![$($element),*]
+            $crate::my_vec![$($element),*]
         }
     };
     // Element and  count

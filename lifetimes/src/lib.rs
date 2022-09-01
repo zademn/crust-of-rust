@@ -38,10 +38,10 @@ impl<'haystack, 'delim> StrSplit<'haystack, 'delim> {
     // Compiler error: If we don't specify lifetimes, we can have a StrSplit alive
     // but `haystack` and `delim` can be deallocated
     pub fn new(haystack: &'haystack str, delim: &'delim str) -> Self {
-        return Self {
+        Self {
             remainder: Some(haystack), // part of string we haven't looked at
             delimiter: delim,
-        };
+        }
     }
 }
 
@@ -56,13 +56,13 @@ impl<'haystack, 'delim> Iterator for StrSplit<'haystack, 'delim> {
                 // split by delimiter
                 let until_delim = &remainder[..next_delim];
                 *remainder = &remainder[(next_delim) + self.delimiter.len()..];
-                return Some(until_delim);
+                Some(until_delim)
             } else {
                 // fn take(&mut self) -> Option<T>
-                return self.remainder.take();
+                self.remainder.take()
             }
         } else {
-            return None;
+            None
         }
     }
 }
@@ -75,7 +75,7 @@ fn until_char<'s>(s: &'s str, c: char) -> &'s str {
     // The rust compiler takes the shorter lifetime (`c`'s lifetime)
     // and it can't return a lifetime that dies in this function
     let delim = &format!("{}", c);
-    StrSplit::new(s, &delim)
+    StrSplit::new(s, delim)
         .next()
         .expect("StrSplit always gives at least one result")
 }

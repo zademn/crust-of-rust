@@ -30,13 +30,13 @@ impl<T> MyRefCell<T> {
             // get first share
             RefState::Unshared => {
                 self.state.set(RefState::Shared(1));
-                return Some(Ref { refcell: self });
+                Some(Ref { refcell: self })
                 //return Some(unsafe { &*self.value.get() });
             }
             // increment shares
             RefState::Shared(n) => {
                 self.state.set(RefState::Shared(n + 1));
-                return Some(Ref { refcell: self });
+                Some(Ref { refcell: self })
                 //return Some(unsafe { &*self.value.get() });
             }
             RefState::Exclusive => None,
@@ -47,7 +47,7 @@ impl<T> MyRefCell<T> {
         if let RefState::Unshared = self.state.get() {
             // Update state to Exclusive
             self.state.set(RefState::Exclusive);
-            return Some(RefMut { refcell: self });
+            Some(RefMut { refcell: self })
             //return Some(unsafe { &mut *self.value.get() });
         } else {
             None

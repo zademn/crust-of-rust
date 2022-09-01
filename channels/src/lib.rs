@@ -20,9 +20,9 @@ impl<T> Clone for Sender<T> {
         let mut inner = self.shared.inner.lock().unwrap();
         inner.senders += 1;
         drop(inner);
-        return Sender {
+        Sender {
             shared: Arc::clone(&self.shared),
-        };
+        }
     }
 }
 
@@ -82,7 +82,7 @@ pub fn channel<T>() -> (Sender<T>, Receiver<T>) {
             shared: shared.clone(),
         },
         Receiver {
-            shared: shared.clone(),
+            shared,
         },
     )
 }
