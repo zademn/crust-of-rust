@@ -1,15 +1,15 @@
 use std::cell::UnsafeCell;
 
-pub struct Cell<T> {
+pub struct MyCell<T> {
     value: UnsafeCell<T>,
 }
 
-// implied by UnsafeCell
+// This is implied by UnsafeCell
 // impl<T> !Sync for Cell<T> {}
 
-impl<T> Cell<T> {
+impl<T> MyCell<T> {
     pub fn new(value: T) -> Self {
-        Cell {
+        MyCell {
             value: UnsafeCell::new(value),
         }
     }
@@ -20,6 +20,7 @@ impl<T> Cell<T> {
         unsafe { *self.value.get() = value };
     }
 
+    /// Return a *copy*, not a reference. 
     pub fn get(&self) -> T
     where
         T: Copy,
@@ -32,12 +33,12 @@ impl<T> Cell<T> {
 
 #[cfg(test)]
 mod tests {
-    use super::Cell;
+    use super::MyCell;
 
     #[test]
     fn bad() {
         use std::sync::Arc;
-        let x = Arc::new(Cell::new(42));
+        let x = Arc::new(MyCell::new(42));
         let x1 = Arc::clone(&x);
 
         // This code is rejected because UnsafeCell implements !Sync already

@@ -1,6 +1,7 @@
-use crate::cell::Cell;
+use crate::cell::MyCell;
 use std::cell::UnsafeCell;
 
+/// Possible states of a reference.
 #[derive(Copy, Clone)]
 enum RefState {
     Unshared,
@@ -8,19 +9,19 @@ enum RefState {
     Exclusive,
 }
 
-pub struct RefCell<T> {
+pub struct MyRefCell<T> {
     value: UnsafeCell<T>,
-    state: Cell<RefState>,
+    state: MyCell<RefState>,
 }
 
 // implied by UnsafeCell
 // impl<T> !Sync for Cell<T> {}
 
-impl<T> RefCell<T> {
+impl<T> MyRefCell<T> {
     pub fn new(value: T) -> Self {
         Self {
             value: UnsafeCell::new(value),
-            state: Cell::new(RefState::Unshared),
+            state: MyCell::new(RefState::Unshared),
         }
     }
 
@@ -56,13 +57,14 @@ impl<T> RefCell<T> {
 
 pub struct Ref<'refcell, T> {
     // lifetime because when the reference goes away this struct must go away
-    refcell: &'refcell RefCell<T>,
+    refcell: &'refcell MyRefCell<T>,
 }
 
+/// deref into the inner type T.
+// something like auto  arrow operator from C.
 impl<T> std::ops::Deref for Ref<'_, T> {
     type Target = T;
     fn deref(&self) -> &Self::Target {
-        // something like auto  arrow operator from C
         unsafe { &*self.refcell.value.get() }
     }
 }
@@ -82,13 +84,13 @@ impl<T> Drop for Ref<'_, T> {
     }
 }
 pub struct RefMut<'refcell, T> {
-    refcell: &'refcell RefCell<T>,
+    refcell: &'refcell MyRefCell<T>,
 }
 
+// something like auto  arrow operator from C
 impl<T> std::ops::Deref for RefMut<'_, T> {
     type Target = T;
     fn deref(&self) -> &Self::Target {
-        // something like auto  arrow operator from C
         // This is given out only when we have no other references. After this set the reference to exclusive
         unsafe { &mut *self.refcell.value.get() }
     }
