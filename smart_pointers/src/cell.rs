@@ -1,3 +1,5 @@
+#![allow(unused_variables)]
+
 use std::cell::UnsafeCell;
 
 pub struct MyCell<T> {
@@ -20,7 +22,7 @@ impl<T> MyCell<T> {
         unsafe { *self.value.get() = value };
     }
 
-    /// Return a *copy*, not a reference. 
+    /// Return a *copy*, not a reference.
     pub fn get(&self) -> T
     where
         T: Copy,
