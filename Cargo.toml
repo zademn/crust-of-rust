@@ -7,5 +7,6 @@ members = [
     "smart_pointers",
     "async-await",
     "sorting",
-    "subtyping_variance"
+    "subtyping_variance",
+    "drop_check",
 ]
