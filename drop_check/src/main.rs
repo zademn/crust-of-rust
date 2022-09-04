@@ -1,5 +1,5 @@
 #![feature(dropck_eyepatch)]
-
+#![allow(unused)]
 use std::marker::PhantomData;
 use std::ptr::NonNull;
 
@@ -20,7 +20,7 @@ struct Deserializer<T> {
 /// #[may_dangle] tells the compiler that even though `MyBox` holds `T` I promise that
 /// the code inside `drop` does *not* access the T.
 /// It may drop(T) but not access it.
-/// #[may_dangle] is a temporary fix atm. 
+/// #[may_dangle] is a temporary fix atm.
 unsafe impl<#[may_dangle] T> Drop for MyBox<T> {
     fn drop(&mut self) {
         // Create a box and drop it. This will deallocate the box.
