@@ -9,4 +9,5 @@ members = [
     "sorting",
     "subtyping_variance",
     "drop_check",
+    "atomics",
 ]
