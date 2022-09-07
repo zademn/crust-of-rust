@@ -10,4 +10,6 @@ members = [
     "subtyping_variance",
     "drop_check",
     "atomics",
+    "dispatch_fat_pointers",
+    
 ]
