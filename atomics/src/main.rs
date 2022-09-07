@@ -1,3 +1,5 @@
+#![allow(unused)]
+
 use std::{
     cell::UnsafeCell,
     sync::{
@@ -22,7 +24,7 @@ impl<T> MyMutex<T> {
         }
     }
     pub fn with_lock<R>(&self, f: impl FnOnce(&mut T) -> R) -> R {
-        // Change to Ordering::Acquire to see the all operations that were stored with Release by another thread. 
+        // Change to Ordering::Acquire to see the all operations that were stored with Release by another thread.
 
         while self
             .locked
@@ -31,35 +33,37 @@ impl<T> MyMutex<T> {
         {}
         // Safety: We hold the lock therefore we can create a mutable reference.
         let ret = f(unsafe { &mut *self.v.get() });
-        // Change to `Release` to ensure the next thread that reads will see this operation. 
-        self.locked.store(UNLOCKED, Ordering::Release); 
+        // Change to `Release` to ensure the next thread that reads will see this operation.
+        self.locked.store(UNLOCKED, Ordering::Release);
         ret
     }
 }
 use std::thread::spawn;
 
-fn main(){
+fn main() {
     let x: &'static _ = Box::leak(Box::new(AtomicBool::new(false)));
     let y: &'static _ = Box::leak(Box::new(AtomicBool::new(false)));
     let z: &'static _ = Box::leak(Box::new(AtomicUsize::new(0)));
 
-    let _tx = spawn (move ||{
+    let _tx = spawn(move || {
         x.store(true, Ordering::Release); // A
     });
 
-    let ty = spawn (move ||{
+    let ty = spawn(move || {
         y.store(true, Ordering::Release); // B
     });
 
-    let t1 = spawn (move ||{
-        while !x.load(Ordering::Acquire){} // C
-        if y.load(Ordering::Acquire){   // D
+    let t1 = spawn(move || {
+        while !x.load(Ordering::Acquire) {} // C
+        if y.load(Ordering::Acquire) {
+            // D
             z.fetch_add(1, Ordering::Relaxed);
         }
     });
-    let t2 = spawn (move ||{
-        while !y.load(Ordering::Acquire){} // E
-        if x.load(Ordering::Acquire){ // F
+    let t2 = spawn(move || {
+        while !y.load(Ordering::Acquire) {} // E
+        if x.load(Ordering::Acquire) {
+            // F
             z.fetch_add(1, Ordering::Relaxed);
         }
     });
@@ -67,7 +71,8 @@ fn main(){
     t1.join().unwrap();
     t2.join().unwrap();
 
-    let z = z.load(Ordering::SeqCst); // Just read whatever z is 
+    let z = z.load(Ordering::SeqCst);
+    // Just read whatever z is
     // What are the possible values for z?
     // is 2 possible?
     // A B C D E F -> 2
@@ -78,17 +83,14 @@ fn main(){
     // We need to think in Happens before relationships
     // A  must happen before C & D.
     // B must happen before E & F.
-    // But there is no relationship between A and F or B and D. 
+    // But there is no relationship between A and F or B and D.
     // Since there is no relationship they can happen *at the same time*
-    // So we have the sequences  A C D -> 0 and B E F -> 0 happening at the same time => we get 0. 
+    // So we have the sequences  A C D -> 0 and B E F -> 0 happening at the same time => we get 0.
 
     // If we change everything to SeqCst then 0 is not possible.
     // This means that if 1 thread sees A happened then ALL threads must see A happen
 
     println!("{z}");
-
-
-
 }
 
 #[test]
