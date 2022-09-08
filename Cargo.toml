@@ -5,11 +5,11 @@ members = [
     "lifetimes",
     "macros_declarative",
     "smart_pointers",
-    "async-await",
     "sorting",
     "subtyping_variance",
     "drop_check",
     "atomics",
+    "async_await",
     "dispatch_fat_pointers",
     
 ]
