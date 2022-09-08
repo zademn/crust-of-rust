@@ -1,10 +1,10 @@
-#[allow(dead_code)]
+#![allow(dead_code)]
 use std::future::Future;
 
 #[tokio::main(flavor = "current_thread")]
 async fn main() {
     println!("Hello world");
-    let x = foo1().await;
+    let _ = foo1().await;
 }
 
 /// foo1 is equivalent to foo2
