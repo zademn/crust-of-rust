@@ -11,5 +11,6 @@ members = [
     "atomics",
     "async_await",
     "dispatch_fat_pointers",
+    "function_traits",
     
 ]
