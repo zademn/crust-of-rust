@@ -60,9 +60,7 @@ fn make_fn() -> impl Fn() {
     }
 }
 
-fn hello(f: Box<dyn Fn()>) {
-    f();
-}
+
 
 
 
