@@ -12,5 +12,6 @@ members = [
     "async_await",
     "dispatch_fat_pointers",
     "function_traits",
+    "send_sync",
     
 ]
