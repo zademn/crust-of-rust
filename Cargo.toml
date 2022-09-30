@@ -13,5 +13,7 @@ members = [
     "dispatch_fat_pointers",
     "function_traits",
     "send_sync",
+    "build_and_ffi",
+    "libsodium-sys",
     
 ]
