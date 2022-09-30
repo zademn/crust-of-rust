@@ -11,7 +11,7 @@ use std::env;
 use std::path::PathBuf;
 
 fn main() {
-    dbg!(std::env::var("OUT_DIR"));
+    // dbg!(std::env::var("OUT_DIR"));
     std::fs::write(
         std::path::Path::new(&std::env::var("OUT_DIR").unwrap()).join("foo.rs"),
         "pub fn foo() {println!(\"Hello from foo\");}",
